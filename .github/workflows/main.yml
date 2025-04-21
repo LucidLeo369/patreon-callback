@@ -1,0 +1,23 @@
+name: Deploy Patreon Callback
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Replace Supabase Credentials
+        run: |
+          sed -i 's|SUPABASE_URL_PLACEHOLDER|${{ secrets.SUPABASE_URL }}|g' patreon-callback.html
+          sed -i 's|SUPABASE_KEY_PLACEHOLDER|${{ secrets.SUPABASE_KEY }}|g' patreon-callback.html
+      
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: .
