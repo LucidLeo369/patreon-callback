@@ -5,11 +5,14 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Replace Supabase Credentials
         run: |
@@ -17,7 +20,6 @@ jobs:
           sed -i 's|SUPABASE_KEY_PLACEHOLDER|${{ secrets.SUPABASE_KEY }}|g' patreon-callback.html
       
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
           folder: .
